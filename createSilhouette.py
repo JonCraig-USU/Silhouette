@@ -12,12 +12,13 @@ class SilhouetteMaker():
             return
         if os.path.exists(path) and os.path.isabs(path):
             # check if jpeg image
-            if os.path.isfile(path) and (path.lower().endswith(".jpg") or path.lower().endswith(".jpeg")):
+            if os.path.isfile(path):
                 self.numFiles += 1
-                self.numImages += 1
+                if (path.lower().endswith(".jpg") or path.lower().endswith(".jpeg")):
+                    self.numImages += 1
                 return
             # Recurse if directory instead of file 
-            elif os.path.isdir(path):
+            elif os.path.isdir(path) and not os.path.basename(path).startswith('.') and not os.path.basename(path).startswith('_'):
                 self.numDirs += 1
                 for name in os.listdir(path):
                     self.check_directory(os.path.join(path, name))
@@ -44,7 +45,7 @@ class SilhouetteMaker():
                 return
 
             # Recurse if directory instead of file 
-            elif os.path.isdir(path):
+            elif os.path.isdir(path) and not os.path.basename(path).startswith('.') and not os.path.basename(path).startswith('_'):
                 for name in os.listdir(path):
                     self.iterate_over_folders(os.path.join(path, name), os.path.join(os.path.dirname(path), f"{os.path.basename(path)}_reverse_silhouette"), threshold_value)
 
